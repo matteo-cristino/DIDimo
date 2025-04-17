@@ -8,7 +8,7 @@ git config user.name "goreleaser"
 git config user.email "goreleaser@example.com"
 
 # Add and commit the file
-git add VERSION.txt
+git add VERSION
 if git diff --cached --quiet; then
     echo "No changes to commit."
 else
