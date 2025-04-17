@@ -33,6 +33,19 @@ jobs:
       - uses: sigstore/cosign-installer@v3.8.1
       - uses: anchore/sbom-action/download-syft@v0.18.0
       - uses: go-semantic-release/action@v1
+        id: semrel
+        dry: true
+        with:
+            github-token: '${{ secrets.GITHUB_TOKEN }}'
+      - if: steps.semrel.outputs.version != ''
+        run: |
+            git config user.name "forkboteu"
+            git config user.email "apps@forkbomb.eu"
+            echo ${{ steps.semrel.outputs.version }} > VERSION
+            git add VERSION
+            git commit -m "chore(pre-release): 🚀 update VERSION to ${{ steps.semrel.outputs.version }} [ci skip]"
+            git push origin main
+      - uses: go-semantic-release/action@v1
         with:
           hooks: goreleaser
         env:
