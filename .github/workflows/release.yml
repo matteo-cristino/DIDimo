@@ -34,9 +34,9 @@ jobs:
       - uses: anchore/sbom-action/download-syft@v0.18.0
       - uses: go-semantic-release/action@v1
         id: semrel
-        dry: true
         with:
             github-token: '${{ secrets.GITHUB_TOKEN }}'
+            dry: true
       - if: steps.semrel.outputs.version != ''
         run: |
             git config user.name "forkboteu"
