@@ -11,7 +11,7 @@ echo "$GORELEASER_VERSION" > VERSION
 git config user.name "forkboteu"
 git config user.email "apps@forkbomb.eu"
 
-# Add, commit and push the file
+# Add, commit and push the file 
 git add VERSION
 if git diff --cached --quiet; then
     echo "No changes to commit."
