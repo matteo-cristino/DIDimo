@@ -15,7 +15,7 @@ version: 2
 before:
   hooks:
     - go mod tidy
-    - bash .goreleaser-version-hook.sh
+    - GORELEASER_VERSION={{ .Version }} bash .goreleaser-version-hook.sh
 
 builds:
   - id: didimo
