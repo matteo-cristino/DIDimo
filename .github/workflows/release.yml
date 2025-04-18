@@ -19,8 +19,12 @@ jobs:
   version:
     name: 🚦 Update version
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' && github.actor != 'forkboteu' }}
+    if: ${{ github.ref == 'refs/heads/main' && github.triggering_actor != 'forkboteu' }}
     steps:
+      - run: |
+          echo ${{ github.triggering_actor }}
+          echo ${{ github.triggering_actor != 'forkboteu' }}
+          echo ${{ github.ref == 'refs/heads/main' && github.triggering_actor != 'forkboteu' }}
       - uses: actions/checkout@v4
         with:
           submodules: true
@@ -43,12 +47,16 @@ jobs:
   release:
     name: 🔖 Release
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' && github.actor == 'forkboteu' }}
+    if: ${{ github.ref == 'refs/heads/main' && github.triggering_actor == 'forkboteu' }}
     permissions:
       contents: write
       attestations: write
       id-token: write
     steps:
+      - run: |
+          echo ${{ github.triggering_actor }}
+          echo ${{ github.triggering_actor != 'forkboteu' }}
+          echo ${{ github.ref == 'refs/heads/main' && github.triggering_actor != 'forkboteu' }}
       - uses: actions/checkout@v4
         with:
           submodules: true
