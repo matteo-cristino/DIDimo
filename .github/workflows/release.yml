@@ -39,6 +39,7 @@ jobs:
             git add VERSION
             git commit -m "chore(pre-release): 🚀 update VERSION to ${{ steps.semrel.outputs.version }} [ci skip]"
             git push origin main
+            sleep 10
 
   release:
     name: 🔖 Release
