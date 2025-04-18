@@ -2,12 +2,9 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-name: 📢 Binaries publish
+name: 🚦 Update version
 on:
   push:
-    branches:
-      - main
-  pull_request:
     branches:
       - main
 
@@ -19,12 +16,7 @@ jobs:
   version:
     name: 🚦 Update version
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' && github.triggering_actor != 'forkboteu' }}
     steps:
-      - run: |
-          echo ${{ github.triggering_actor }}
-          echo ${{ github.triggering_actor != 'forkboteu' }}
-          echo ${{ github.ref == 'refs/heads/main' && github.triggering_actor != 'forkboteu' }}
       - uses: actions/checkout@v4
         with:
           submodules: true
@@ -41,34 +33,6 @@ jobs:
             git config user.email "apps@forkbomb.eu"
             echo ${{ steps.semrel.outputs.version }} > VERSION
             git add VERSION
-            git commit -m "chore(pre-release): 🚀 update VERSION to ${{ steps.semrel.outputs.version }}"
+            git commit -m "chore(release): 🚀 update VERSION to ${{ steps.semrel.outputs.version }}"
             git push origin main
 
-  release:
-    name: 🔖 Release
-    runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/main' && github.triggering_actor == 'forkboteu' }}
-    permissions:
-      contents: write
-      attestations: write
-      id-token: write
-    steps:
-      - run: |
-          echo ${{ github.triggering_actor }}
-          echo ${{ github.triggering_actor != 'forkboteu' }}
-          echo ${{ github.ref == 'refs/heads/main' && github.triggering_actor != 'forkboteu' }}
-      - uses: actions/checkout@v4
-        with:
-          submodules: true
-          ref: main
-      - uses: jdx/mise-action@v2
-      - uses: sigstore/cosign-installer@v3.8.1
-      - uses: anchore/sbom-action/download-syft@v0.18.0
-      - uses: go-semantic-release/action@v1
-        with:
-          hooks: goreleaser
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/attest-build-provenance@v2
-        with:
-          subject-checksums: ./dist/checksums.txt
